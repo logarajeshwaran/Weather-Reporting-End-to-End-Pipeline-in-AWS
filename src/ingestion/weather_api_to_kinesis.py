@@ -6,7 +6,8 @@ import requests
 import time
 import random
 from utils.kinesis_manager import KinesisManager
-
+from dotenv import load_dotenv
+load_dotenv()
 
 class WeatherKinesisPipeline:
 
@@ -28,7 +29,22 @@ class WeatherKinesisPipeline:
         print(url)
         response = requests.get(url=url)
         if response.status_code == 200:
-            return response.json()
+            ouput = response.json()
+            name = ouput['name']
+            temp = ouput['main']['temp']
+            pressure = ouput['main']['pressure']
+            humidity = ouput['main']['humidity']
+            wind_speed = ouput['wind']['speed']
+            country = ouput['sys']['country']
+            result_dict = {
+                        'name': name,
+                        'temp': temp,
+                        'pressure': pressure,
+                        'humidity': humidity,
+                        'wind_speed': wind_speed,
+                        'country': country
+                    }
+            return result_dict
         else:
             print(f"Failed API call for the city {city} : HTTP {response.status_code}")
             return None
@@ -51,3 +67,8 @@ class WeatherKinesisPipeline:
                 self.push_data_to_kinesis(weather_data)
                 print(f"Pushed Weather Data  for the city {city} to kinesis at {time.time()}")
             time.sleep(2)
+
+
+if __name__ == '__main__':
+    weather = WeatherKinesisPipeline()
+    weather.run()
