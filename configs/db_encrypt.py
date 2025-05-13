@@ -11,7 +11,7 @@ with open(key_file,'wb') as f:
 
 f = Fernet(key)
 
-encypt_data = f.encrypt(b'mysql_username=weather_data_pipeline\nmysql_password=weather_data_pipeline!')
+encypt_data = f.encrypt(b'mysql_username=weather_data_pipeline|mysql_password=weather_data_pipeline!')
 
 with open(password_file,'wb') as enc_file:
     enc_file.write(encypt_data)

@@ -60,15 +60,16 @@ class WeatherKinesisPipeline:
 
     def run(self):
         print("Starting Kinesis Pipeline for pushing data from weather API")
-        while True:
-            city = random.choice(self.cities)
-            weather_data = self.fetch_weather_data(city=city)
-            if weather_data:
-                self.push_data_to_kinesis(weather_data)
-                print(f"Pushed Weather Data  for the city {city} to kinesis at {time.time()}")
-            time.sleep(2)
+        city = random.choice(self.cities)
+        weather_data = self.fetch_weather_data(city=city)
+        if weather_data:
+            self.push_data_to_kinesis(weather_data)
+            print(f"Pushed Weather Data  for the city {city} to kinesis at {time.time()}")
 
 
 if __name__ == '__main__':
     weather = WeatherKinesisPipeline()
-    weather.run()
+    while True:
+        weather.run()
+        time.sleep(10)
+
